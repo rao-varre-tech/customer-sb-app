@@ -1,16 +1,27 @@
 package agent.raovarre.test.controllers;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RestController
-@RequestMapping("/test-agent")
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.test.web.servlet.MockMvc;
+
+@WebMvcTest(TestAgentController.class)
 public class TestAgentControllerTest {
 
-	@GetMapping("/create")
-	public String create() {
-		return "Test Agent Created Successfully";
+	@Autowired
+	private MockMvc mockMvc;
+
+	@Test
+	public void createAgrentSuccessTest() throws Exception {
+		mockMvc.perform(get("/test-agent/create"))
+		.andExpect(status().isOk())
+		.andExpect(content().string("Test Agent Created Successfully"));
+
+
 	}
-	
+
 }
