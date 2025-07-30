@@ -50,7 +50,7 @@ jobs:
             -Dsonar.pullrequest.key=${{ github.event.number }} \
             -Dsonar.pullrequest.branch=${{ github.head_ref }} \
             -Dsonar.pullrequest.base=${{ github.base_ref }} \
-            -Dsonar.scm.revision=${{ github.event.pull_request.head.sha || github.sha }} 
+            -Dsonar.scm.revision=${{ github.event.pull_request.head.sha || github.sha }}
             
       - name: Build with Maven
         run: mvn -B package --file pom.xml
