@@ -6,7 +6,7 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: Java CI with Maven
+name: Build and Analyze with SonarCloud
 
 on:
   push:
@@ -17,26 +17,23 @@ on:
 
 jobs:
   build:
-
+    name: Build and Analyze with SonarCloud # Descriptive job name
     runs-on: ubuntu-latest
     permissions:
-      contents: ["write", "read"]
+      contents: write
       pull-requests: write # For PR decoration by SonarCloud (comments on PRs)
       security-events: write # For pushing results to GitHub's Code Scanning alerts
       actions: read # If you use SonarCloud's GitHub Action directly, might need this
 
     steps:
-    - name: Checkout code
+    - name: Checkout code # Descriptive step name
       # This step checks out your repository under $GITHUB_WORKSPACE, so your workflow can access it.
       # The fetch-depth is set to 0 to ensure that the full history is available for SonarCloud analysis.
     - uses: actions/checkout@v4
       with:
         # Shallow clones should be disabled for SonarCloud to analyze all code and history correctly
-        fetch-depth: 0
-
-    steps:
-    - uses: actions/checkout@v4
-    - name: Set up JDK 17
+        fetch-depth: 0 
+    - name: Set up Java Development Kit # Another descriptive step name
       uses: actions/setup-java@v4
       with:
         java-version: '17'
@@ -56,8 +53,8 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Automatically provided by GitHub Actions for PR decoration
       run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
-          -Dsonar.projectKey={{ secrets.TEST_SB_APP_PROJECT_KEY }} \
-          -Dsonar.organization={{secrets.ORGANIZATION_KEY}} \
+          -Dsonar.projectKey=${{ secrets.TEST_SB_APP_PROJECT_KEY }} \
+          -Dsonar.organization=${{secrets.ORGANIZATION_KEY}} \
           -Dsonar.host.url=https://sonarcloud.io \
           -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
           -Dsonar.qualitygate.wait=true \
