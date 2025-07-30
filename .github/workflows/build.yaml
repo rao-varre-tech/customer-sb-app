@@ -13,13 +13,26 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+    types: [opened, synchronize, reopened]
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: ["write", "read"]
+      pull-requests: write # For PR decoration by SonarCloud (comments on PRs)
+      security-events: write # For pushing results to GitHub's Code Scanning alerts
+      actions: read # If you use SonarCloud's GitHub Action directly, might need this
+
+    steps:
+    - name: Checkout code
+      # This step checks out your repository under $GITHUB_WORKSPACE, so your workflow can access it.
+      # The fetch-depth is set to 0 to ensure that the full history is available for SonarCloud analysis.
+    - uses: actions/checkout@v4
+      with:
+        # Shallow clones should be disabled for SonarCloud to analyze all code and history correctly
+        fetch-depth: 0
 
     steps:
     - uses: actions/checkout@v4
@@ -29,6 +42,30 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
+    
+    - name: Cache SonarCloud scanner
+      uses: actions/cache@v3
+      with:
+        path: ~/.sonar/cache
+        key: ${{ runner.os }}-sonar
+        restore-keys: ${{ runner.os }}-sonar
+
+    - name: Build and Analyze with SonarCloud
+      env:
+        # These are used by the SonarScanner for Maven
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Automatically provided by GitHub Actions for PR decoration
+      run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+          -Dsonar.projectKey={{ secrets.TEST_SB_APP_PROJECT_KEY }} \
+          -Dsonar.organization={{secrets.ORGANIZATION_KEY}} \
+          -Dsonar.host.url=https://sonarcloud.io \
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+          -Dsonar.qualitygate.wait=true \
+          -Dsonar.pullrequest.key=${{ github.event.number }} \
+          -Dsonar.pullrequest.branch=${{ github.head_ref }} \
+          -Dsonar.pullrequest.base=${{ github.base_ref }} \
+          -Dsonar.scm.revision=${{ github.event.pull_request.head.sha || github.sha }} # Use PR head SHA for PRs, or push SHA
+          
     - name: Build with Maven
       run: mvn -B package --file pom.xml
 
