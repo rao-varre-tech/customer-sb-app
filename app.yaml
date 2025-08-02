@@ -2,8 +2,9 @@ runtime: java17
 instance_class: F1
 entrypoint: java -jar target/customer-0.1.0.jar
 
-manual_scaling:
-  instances: 1
+automatic_scaling:
+  min_instances: 1
+  max_instances: 2
 
 resources:
   memory_gb: 1
