@@ -10,10 +10,10 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>agent.raovarretech.</groupId>
-	<artifactId>test</artifactId>
+	<artifactId>customer</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>test</name>
-	<description>Test project for Spring Boot</description>
+	<description>Customer app for banking</description>
 	<url />
 	<licenses>
 		<license />

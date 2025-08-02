@@ -1,4 +1,4 @@
-package agent.raovarre.test.configurations;
+package agent.raovarre.customer.configurations;
 
 import org.springframework.stereotype.Component;
 

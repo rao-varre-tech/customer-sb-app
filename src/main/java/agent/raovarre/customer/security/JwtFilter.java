@@ -1,4 +1,4 @@
-package agent.raovarre.test.security;
+package agent.raovarre.customer.security;
 
 import org.springframework.stereotype.Component;
 
