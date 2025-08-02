@@ -10,8 +10,16 @@ name: Build and Analyze with SonarCloud
 
 on:
   push:
+    paths:
+      - 'pom.xml'
+      - '**.java'
+      - '.github/workflows/**'
     branches: [ "main" ]
   pull_request:
+    paths:
+      - 'pom.xml'
+      - '**.java'
+      - '.github/workflows/**'
     branches: [ "main" ]
     types: [opened, synchronize, reopened]
 
