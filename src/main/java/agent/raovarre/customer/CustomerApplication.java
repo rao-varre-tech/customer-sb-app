@@ -1,13 +1,13 @@
-package agent.raovarre.test;
+package agent.raovarre.customer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class TestApplication {
+public class CustomerApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TestApplication.class, args);
+		SpringApplication.run(CustomerApplication.class, args);
 	}
 
 }
