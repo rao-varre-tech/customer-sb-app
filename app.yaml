@@ -1,0 +1,9 @@
+runtime: java
+env: flex
+entrypoint: java -jar target/customer-0.1.0.jar
+
+manual_scaling:
+  instances: 1
+
+resources:
+  memory_gb: 1
