@@ -1,5 +1,5 @@
-runtime: java
-env: flex
+runtime: java17
+instance_class: F1
 entrypoint: java -jar target/customer-0.1.0.jar
 
 manual_scaling:
